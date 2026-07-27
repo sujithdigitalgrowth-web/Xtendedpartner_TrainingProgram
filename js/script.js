@@ -2,6 +2,7 @@
 
 var WHATSAPP_NUMBER = '918951367357';
 var WHATSAPP_MESSAGE = "Hi, I'd like to reserve my seat for the Job-Ready Program (Batch 1).";
+var BATCH_START_DATE = '2026-08-10T00:00:00+05:30';
 
 document.addEventListener('DOMContentLoaded', function () {
   initNav();
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initStickyCta();
   initWhatsAppCtas();
   initScrollEffects();
+  initEnrollmentCountdown();
   trackViewContent();
 });
 
@@ -113,6 +115,31 @@ function initStickyCta() {
     { threshold: 0.15 }
   );
   observer.observe(reserveSection);
+}
+
+// ---------------------------------------------------------------------------
+// Enrollment countdown — days remaining until the batch start date
+// ---------------------------------------------------------------------------
+function initEnrollmentCountdown() {
+  var targets = document.querySelectorAll('.js-days-left');
+  if (!targets.length) return;
+
+  var msPerDay = 1000 * 60 * 60 * 24;
+  var diff = new Date(BATCH_START_DATE).getTime() - Date.now();
+  var daysLeft = Math.ceil(diff / msPerDay);
+
+  var text;
+  if (daysLeft > 1) {
+    text = daysLeft + ' days left to enroll';
+  } else if (daysLeft === 1) {
+    text = '1 day left to enroll';
+  } else {
+    text = 'Enrollment closing soon';
+  }
+
+  targets.forEach(function (el) {
+    el.textContent = text;
+  });
 }
 
 // ---------------------------------------------------------------------------
