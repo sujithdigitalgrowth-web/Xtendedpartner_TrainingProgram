@@ -234,7 +234,7 @@ h1, h2, h3, p { margin: 0; }
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
-  padding-block: 44px 40px;
+  padding-block: 44px 56px;
   scroll-margin-top: var(--header-height);
 }
 .hero__orbs {
@@ -411,6 +411,10 @@ h1, h2, h3, p { margin: 0; }
   position: relative;
   width: 100%;
   max-width: 300px;
+  margin-bottom: 24px;
+}
+@media (min-width: 860px) {
+  .hero__visual { margin-bottom: 0; }
 }
 .ad-mock {
   position: relative;
@@ -462,34 +466,62 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: 0.03em;
   color: var(--color-ink);
 }
-.ad-mock__row {
+.ad-mock__industries {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.ad-mock__industry {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
+  padding: 8px 9px;
+  background: var(--color-accent-soft);
+  border-radius: 9px;
 }
-.ad-mock__label {
+.ad-mock__industry-icon {
   flex: 0 0 auto;
-  width: 60px;
-  font-size: 0.62rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent);
+}
+.ad-mock__industry-icon svg {
+  width: 15px;
+  height: 15px;
+}
+.ad-mock__industry-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+.ad-mock__stats {
+  display: flex;
+  gap: 14px;
+  padding: 2px 2px 4px;
+}
+.ad-mock__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ad-mock__stat-num {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.1;
+}
+.ad-mock__stat-label {
+  font-size: 0.64rem;
   font-weight: 600;
   color: var(--color-ink-soft);
+  line-height: 1.25;
 }
-.ad-mock__track {
-  flex: 1;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--color-bg-alt);
-  overflow: hidden;
-}
-.ad-mock__bar {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-}
-.ad-mock__bar--blue { background: linear-gradient(90deg, #0b3d5c, #1584a8); }
-.ad-mock__bar--green { background: linear-gradient(90deg, #1a8f5e, #34c785); }
-.ad-mock__bar--amber { background: linear-gradient(90deg, #b8791a, #f0a83c); }
-.ad-mock__bar--violet { background: linear-gradient(90deg, #5b3fa8, #8b6fd6); }
 .ad-mock__chart {
   margin-top: 1px;
   padding-top: 11px;
