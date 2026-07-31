@@ -361,18 +361,6 @@ h1, h2, h3, p { margin: 0; }
   font-weight: 600;
   color: var(--color-ink-soft);
 }
-.hero__countdown {
-  margin-top: 10px;
-  display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--color-accent);
-  background: var(--color-accent-soft);
-  border-radius: 999px;
-  padding: 5px 14px;
-}
-.hero__countdown:empty { display: none; }
-
 
 @media (min-width: 700px) {
   .hero { padding-block: 72px 60px; }
@@ -683,6 +671,9 @@ section {
   font-size: 0.92rem;
   color: var(--color-ink-soft);
 }
+.curriculum .section-header__note {
+  white-space: nowrap;
+}
 
 @media (min-width: 700px) {
   section { padding-block: 60px; }
@@ -698,37 +689,47 @@ section {
   gap: 12px;
 }
 .why-card {
+  display: flex;
+  flex-direction: column;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: 0 4px 20px rgba(16, 32, 43, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.why-card:hover {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow: 0 16px 32px -12px rgba(11, 61, 92, 0.18), 0 4px 12px rgba(16, 32, 43, 0.06);
 }
 .why-card__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  color: #fff;
 }
 .why-card__icon svg {
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 19px;
 }
 .why-card__title {
   font-family: var(--font-heading);
-  font-size: 0.92rem;
+  font-size: 0.96rem;
   font-weight: 600;
   color: var(--color-accent);
-  margin-bottom: 5px;
-  line-height: 1.3;
+  margin-bottom: 7px;
+  line-height: 1.35;
 }
 .why-card__body {
-  font-size: 0.82rem;
-  line-height: 1.4;
+  font-size: 0.85rem;
+  line-height: 1.5;
   color: var(--color-ink-soft);
 }
 
@@ -940,8 +941,13 @@ section {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  max-width: 760px;
+  max-width: 100%;
   margin: 0 auto 28px;
+}
+@media (min-width: 860px) {
+  .quick-facts {
+    flex-wrap: nowrap;
+  }
 }
 .quick-facts__chip {
   display: inline-flex;
@@ -1097,17 +1103,6 @@ section {
   height: 18px;
   color: var(--color-accent);
 }
-
-.reserve-box__countdown {
-  display: inline-block;
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--color-accent);
-  background: var(--color-accent-soft);
-  border-radius: 999px;
-  padding: 5px 14px;
-}
-.reserve-box__countdown:empty { display: none; }
 
 /* ==========================================================================
    Sticky mobile CTA
