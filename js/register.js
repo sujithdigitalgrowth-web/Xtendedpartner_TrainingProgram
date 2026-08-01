@@ -16,6 +16,7 @@ var registerState = {
     q3: null,
     q4: null,
     q5: '',
+    batch: null,
     name: '',
     whatsapp: '',
     email: ''
@@ -52,6 +53,12 @@ var QUESTIONS = [
     type: 'text',
     text: 'What are you hoping to get out of this program?',
     placeholder: 'e.g. Land my first marketing job, switch careers, upskill for my current role'
+  },
+  {
+    key: 'batch',
+    type: 'select',
+    text: 'Which group do you want to join?',
+    options: ['Evening 7–8.30', 'Morning 8.30–10']
   },
   {
     key: 'q6',
@@ -313,6 +320,7 @@ function submitLead(answers) {
     experience: answers.q3,
     commitment: answers.q4,
     goal: answers.q5,
+    batch: answers.batch,
     name: answers.name,
     whatsapp: answers.whatsapp,
     email: answers.email
@@ -343,6 +351,7 @@ function renderConfirm() {
     'Hi! I just registered for the Job Ready Program.\n' +
     'Status: ' + a.q1 + ' | Passed out: ' + a.q2 + ' | Experience: ' + a.q3 + '\n' +
     'Commitment: ' + a.q4 + ' | Goal: ' + a.q5 + '\n' +
+    'Batch: ' + a.batch + '\n' +
     'Name: ' + a.name;
   var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
 
