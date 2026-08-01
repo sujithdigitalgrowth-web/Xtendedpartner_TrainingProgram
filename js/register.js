@@ -15,8 +15,7 @@ var registerState = {
     q2: null,
     q3: null,
     q4: null,
-    q5: '',
-    batch: null,
+    slot: null,
     name: '',
     whatsapp: '',
     email: ''
@@ -49,16 +48,10 @@ var QUESTIONS = [
     options: ['Yes, definitely', 'Mostly, with occasional misses', 'Not sure yet']
   },
   {
-    key: 'q5',
-    type: 'text',
-    text: 'What are you hoping to get out of this program?',
-    placeholder: 'e.g. Land my first marketing job, switch careers, upskill for my current role'
-  },
-  {
-    key: 'batch',
+    key: 'slot',
     type: 'select',
-    text: 'Which group do you want to join?',
-    options: ['Evening 7–8.30', 'Morning 8.30–10']
+    text: 'Which slot would you like to join?',
+    options: ['Morning: 8 AM – 9.30 AM', 'Evening: 6 PM – 7.30 PM']
   },
   {
     key: 'q6',
@@ -160,14 +153,6 @@ function renderQuestion(step) {
           '</button>';
       }).join('') +
       '</div>';
-  } else if (q.type === 'text') {
-    bodyHtml =
-      '<h2 class="qual__question">' + escapeHtml(q.text) + '</h2>' +
-      '<div class="qual__field">' +
-        '<input type="text" class="qual__input" id="qual-text-input" placeholder="' + escapeHtml(q.placeholder) + '" value="' + escapeHtml(registerState.answers.q5) + '">' +
-        '<p class="qual__error" id="qual-text-error">Please share a quick answer before continuing.</p>' +
-      '</div>' +
-      '<button type="button" class="btn btn--primary btn--large qual__continue" id="qual-continue">Continue</button>';
   } else if (q.type === 'contact') {
     bodyHtml =
       '<h2 class="qual__question">' + escapeHtml(q.text) + '</h2>' +
@@ -196,8 +181,6 @@ function renderQuestion(step) {
 
   if (q.type === 'select') {
     bindSelectOptions(q, step);
-  } else if (q.type === 'text') {
-    bindTextQuestion(q, step);
   } else if (q.type === 'contact') {
     bindContactQuestion(step);
   }
@@ -217,33 +200,6 @@ function bindSelectOptions(q, step) {
       }, 380);
     });
   });
-}
-
-function bindTextQuestion(q, step) {
-  var input = document.getElementById('qual-text-input');
-  var error = document.getElementById('qual-text-error');
-  var continueBtn = document.getElementById('qual-continue');
-
-  function submit() {
-    var value = input.value.trim();
-    if (!value) {
-      input.classList.add('has-error');
-      error.classList.add('is-visible');
-      input.focus();
-      return;
-    }
-    registerState.answers.q5 = value;
-    renderStep(step + 1);
-  }
-
-  input.addEventListener('input', function () {
-    input.classList.remove('has-error');
-    error.classList.remove('is-visible');
-  });
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') submit();
-  });
-  continueBtn.addEventListener('click', submit);
 }
 
 function bindContactQuestion(step) {
@@ -319,8 +275,7 @@ function submitLead(answers) {
     graduationYear: answers.q2,
     experience: answers.q3,
     commitment: answers.q4,
-    goal: answers.q5,
-    batch: answers.batch,
+    slot: answers.slot,
     name: answers.name,
     whatsapp: answers.whatsapp,
     email: answers.email
@@ -350,8 +305,8 @@ function renderConfirm() {
   var message =
     'Hi! I just registered for the Job Ready Program.\n' +
     'Status: ' + a.q1 + ' | Passed out: ' + a.q2 + ' | Experience: ' + a.q3 + '\n' +
-    'Commitment: ' + a.q4 + ' | Goal: ' + a.q5 + '\n' +
-    'Batch: ' + a.batch + '\n' +
+    'Commitment: ' + a.q4 + '\n' +
+    'Slot: ' + a.slot + '\n' +
     'Name: ' + a.name;
   var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
 
