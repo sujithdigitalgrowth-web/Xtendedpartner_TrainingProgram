@@ -1064,7 +1064,7 @@ section {
   align-items: flex-start;
   gap: 8px;
 }
-.pricing__header-cta .whatsapp-cta {
+.pricing__header-cta .reserve-cta {
   width: 100%;
 }
 
@@ -1079,7 +1079,7 @@ section {
     align-items: flex-end;
     text-align: right;
   }
-  .pricing__header-cta .whatsapp-cta {
+  .pricing__header-cta .reserve-cta {
     width: auto;
   }
 }

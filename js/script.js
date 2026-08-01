@@ -1,13 +1,9 @@
 // Job-Ready Program — landing page behavior.
 
-var WHATSAPP_NUMBER = '918951367357';
-var WHATSAPP_MESSAGE = "Hi, I'd like to reserve my seat for the Job-Ready Program.";
-
 document.addEventListener('DOMContentLoaded', function () {
   initNav();
   initAccordions();
   initStickyCta();
-  initWhatsAppCtas();
   initScrollEffects();
   trackViewContent();
 });
@@ -116,18 +112,6 @@ function initStickyCta() {
 }
 
 // ---------------------------------------------------------------------------
-// WhatsApp CTAs — set the deep link href, track a Lead event on click
-// ---------------------------------------------------------------------------
-function initWhatsAppCtas() {
-  var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
-
-  document.querySelectorAll('.whatsapp-cta').forEach(function (cta) {
-    cta.href = url;
-    cta.addEventListener('click', trackLeadEvent);
-  });
-}
-
-// ---------------------------------------------------------------------------
 // Meta Pixel / GA4 event tracking
 // Guarded with typeof checks so nothing breaks before the real IDs are added.
 // ---------------------------------------------------------------------------
@@ -137,22 +121,5 @@ function trackViewContent() {
   }
   if (typeof gtag !== 'undefined') {
     gtag('event', 'view_content', { content_name: 'Job-Ready Program Landing Page' });
-  }
-}
-
-function trackLeadEvent() {
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'Lead', {
-      content_name: 'Job-Ready Program',
-      value: 8999,
-      currency: 'INR'
-    });
-  }
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'generate_lead', {
-      content_name: 'Job-Ready Program',
-      value: 8999,
-      currency: 'INR'
-    });
   }
 }
