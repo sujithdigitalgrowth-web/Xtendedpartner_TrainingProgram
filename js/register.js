@@ -7,6 +7,37 @@ var WHATSAPP_NUMBER = '918951367357';
 // Paste the deployed /exec URL here once the Apps Script webhook is set up.
 var LEADS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwSsIhgsIdl5O_XE8vXY2KuGWmnWJIE4kMf80VjYs7CWJth9xJNEC6muRqOMCzCtdsS/exec';
 
+// Which program this registration is for — driven by ?program=one-on-one on the URL.
+// Falls back to the group Job-Ready Program for any other/missing value.
+var PROGRAM = new URLSearchParams(window.location.search).get('program') === 'one-on-one' ? 'one-on-one' : 'group';
+
+var PROGRAM_INFO = {
+  group: {
+    name: 'Job-Ready Program',
+    tag: 'Job-Ready Program',
+    price: 8999,
+    clarifyHeadline: 'This Is a Job-Ready Program, Not a Job Placement Guarantee',
+    clarifyBody: 'We prepare you to be genuinely interview-ready &mdash; through hands-on training, live account experience, 9 industry certifications, and 3 full mock interview rounds. What we do not do is guarantee you a job or placement. Your outcome depends on your own effort and performance in interviews.',
+    commitmentQuestion: 'This program runs live, Monday&ndash;Friday, for 50 days. Can you commit to that?',
+    slotQuestion: {
+      text: 'Which slot would you like to join?',
+      options: ['Morning: 8 AM – 9.30 AM', 'Evening: 6 PM – 7.30 PM']
+    }
+  },
+  'one-on-one': {
+    name: '1-on-1 Advanced Training',
+    tag: '1-on-1 Advanced Training',
+    price: 19999,
+    clarifyHeadline: 'This Is a 1-on-1 Advanced Training, Not a Job Placement Guarantee',
+    clarifyBody: 'We prepare you to be genuinely interview-ready &mdash; through personalized 1-on-1 training, live account experience, advanced modules like Google Tag Manager, media planning &amp; AI-powered performance decks, 9 industry certifications, and full mock interview rounds. What we do not do is guarantee you a job or placement. Your outcome depends on your own effort and performance in interviews.',
+    commitmentQuestion: 'This is a 50-day program that needs consistent, regular commitment on your side. Can you commit to that?',
+    slotQuestion: {
+      text: 'What time of day generally works best for your 1-on-1 sessions?',
+      options: ['Morning', 'Afternoon', 'Evening', 'Flexible / not sure yet']
+    }
+  }
+};
+
 var registerState = {
   step: 0,
   clarifyAcknowledged: false,
@@ -21,6 +52,8 @@ var registerState = {
     email: ''
   }
 };
+
+var CURRENT_PROGRAM = PROGRAM_INFO[PROGRAM];
 
 var QUESTIONS = [
   {
@@ -44,14 +77,14 @@ var QUESTIONS = [
   {
     key: 'q4',
     type: 'select',
-    text: 'This program runs live, Monday–Friday, for 50 days. Can you commit to that?',
+    text: CURRENT_PROGRAM.commitmentQuestion,
     options: ['Yes, definitely', 'Mostly, with occasional misses', 'Not sure yet']
   },
   {
     key: 'slot',
     type: 'select',
-    text: 'Which slot would you like to join?',
-    options: ['Morning: 8 AM – 9.30 AM', 'Evening: 6 PM – 7.30 PM']
+    text: CURRENT_PROGRAM.slotQuestion.text,
+    options: CURRENT_PROGRAM.slotQuestion.options
   },
   {
     key: 'q6',
@@ -61,8 +94,18 @@ var QUESTIONS = [
 ];
 
 document.addEventListener('DOMContentLoaded', function () {
+  applyProgramBranding();
   renderStep(0);
 });
+
+// ---------------------------------------------------------------------------
+// Reflect the selected program in the page chrome (title + header brand tag)
+// ---------------------------------------------------------------------------
+function applyProgramBranding() {
+  document.title = 'Register — ' + CURRENT_PROGRAM.name + ' | Xtended Partner';
+  var brandTag = document.querySelector('.register-header__brand .site-header__brand-tag');
+  if (brandTag) brandTag.textContent = CURRENT_PROGRAM.tag;
+}
 
 // ---------------------------------------------------------------------------
 // Step router
@@ -92,8 +135,8 @@ function renderClarify() {
   root.innerHTML =
     '<section class="clarify register-step" aria-labelledby="clarify-heading">' +
       '<p class="clarify__eyebrow">Before You Continue</p>' +
-      '<h1 class="clarify__headline" id="clarify-heading">This Is a Job-Ready Program, Not a Job Placement Guarantee</h1>' +
-      '<p class="clarify__body">We prepare you to be genuinely interview-ready &mdash; through hands-on training, live account experience, 9 industry certifications, and 3 full mock interview rounds. What we do not do is guarantee you a job or placement. Your outcome depends on your own effort and performance in interviews.</p>' +
+      '<h1 class="clarify__headline" id="clarify-heading">' + CURRENT_PROGRAM.clarifyHeadline + '</h1>' +
+      '<p class="clarify__body">' + CURRENT_PROGRAM.clarifyBody + '</p>' +
       '<p class="clarify__note">Takes about 30 seconds</p>' +
       '<label class="clarify__checkbox" for="clarify-checkbox">' +
         '<input type="checkbox" id="clarify-checkbox">' +
@@ -271,6 +314,7 @@ function submitLead(answers) {
 
   var payload = {
     timestamp: new Date().toISOString(),
+    program: CURRENT_PROGRAM.name,
     status: answers.q1,
     graduationYear: answers.q2,
     experience: answers.q3,
@@ -303,7 +347,7 @@ function renderConfirm() {
 
   var a = registerState.answers;
   var message =
-    'Hi! I just registered for the Job Ready Program.\n' +
+    'Hi! I just registered for the ' + CURRENT_PROGRAM.name + '.\n' +
     'Status: ' + a.q1 + ' | Passed out: ' + a.q2 + ' | Experience: ' + a.q3 + '\n' +
     'Commitment: ' + a.q4 + '\n' +
     'Slot: ' + a.slot + '\n' +
@@ -330,18 +374,18 @@ function renderConfirm() {
 // ---------------------------------------------------------------------------
 function trackRegistrationComplete() {
   if (typeof fbq !== 'undefined') {
-    fbq('track', 'Lead', { content_name: 'Job-Ready Program', value: 8999, currency: 'INR' });
+    fbq('track', 'Lead', { content_name: CURRENT_PROGRAM.name, value: CURRENT_PROGRAM.price, currency: 'INR' });
   }
   if (typeof gtag !== 'undefined') {
-    gtag('event', 'generate_lead', { content_name: 'Job-Ready Program', value: 8999, currency: 'INR' });
+    gtag('event', 'generate_lead', { content_name: CURRENT_PROGRAM.name, value: CURRENT_PROGRAM.price, currency: 'INR' });
   }
 }
 
 function trackWhatsAppClick() {
   if (typeof fbq !== 'undefined') {
-    fbq('track', 'Contact', { content_name: 'Job-Ready Program' });
+    fbq('track', 'Contact', { content_name: CURRENT_PROGRAM.name });
   }
   if (typeof gtag !== 'undefined') {
-    gtag('event', 'contact', { content_name: 'Job-Ready Program' });
+    gtag('event', 'contact', { content_name: CURRENT_PROGRAM.name });
   }
 }
